@@ -1,75 +1,55 @@
-import { AddCircleOutlineRounded } from '@mui/icons-material';
-import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
-import {
-  IconButton,
-  Link,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Tooltip,
-  Typography,
-} from '@mui/material';
-import Toolbar from '@mui/material/Toolbar/Toolbar';
+import { Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import Image from 'mui-image';
 import React, { useEffect, useState } from 'react';
 
 import { Projeto } from '../models/Projeto';
-import { busca } from '../services/ProjetoService';
+import { busca as buscaProjeto } from '../services/ProjetoService';
 import ModalFiltro from './ModalFiltro';
+import TableToolbar from './TableToolbar';
+import { Turma } from '../models/Turma';
+import { busca as buscaTurma } from '../services/TurmaService';
 
-const TableToolbar = () => {
-  return (
-    <Toolbar>
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h5"
-          id="tb_projetos"
-          component="div"
-        >
-          Projetos
-        </Typography>
-        
-        <Tooltip title="Filtrar">
-          <IconButton>
-            <FilterAltRoundedIcon />
-          </IconButton>
-        </Tooltip>
-
-        <Tooltip title="Adicionar projeto">
-          <IconButton>
-            <AddCircleOutlineRounded />
-          </IconButton>
-        </Tooltip>
-    </Toolbar>
-  );
-}
 
 function ListaProjetos() {
   const [projetos, setProjetos] = useState<Projeto[]>([]);
-  const [turmas, setTurmas] = useState<string[]>([]);
+  const [turmas, setTurmas] = useState<Turma[]>([]);
+  const [turmasSelecionadas, setTurmasSelecionadas] = useState<string[]>([]);
   const colunas: string[] = ['Logo', 'Nome', 'Grupo', 'Turma', 'Link', 'Pitch'];
-  const [open, setOpen] = useState<boolean>(true);
+  const [openFiltrar, setOpenFiltrar] = useState<boolean>(false);
 
   async function getProjeto(){
-    await busca("", setProjetos);
+    await buscaProjeto("", setProjetos);
   }
 
   useEffect(() => {
     getProjeto();
   }, [projetos.length]);
 
-  const handleConfirmar = (turmas: string[]) => {
-    setTurmas(turmas);
-    setOpen(false);
+  async function getTurma(){
+    await buscaTurma("", setTurmas);
+    setTurmasSelecionadas(turmas.map((turma) => turma.id.toString())); 
+  }
+
+  useEffect(() => {
+    getTurma();
+  }, [turmas.length]);
+
+  const handleConfirmar = (turmasSelecionadas: string[]) => {
+    setTurmasSelecionadas(turmasSelecionadas);
+    setOpenFiltrar(false);
+  }
+
+  const handleOpenFiltrar = () => {
+    setOpenFiltrar(true);
+  }
+
+  const handleCloseFiltrar = () => {
+    setOpenFiltrar(false);
   }
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableToolbar />
+      <TableToolbar handleOpenFiltrar={handleOpenFiltrar} />
       <TableContainer>
         <Table>
           <TableHead>
@@ -111,9 +91,12 @@ function ListaProjetos() {
           </TableBody>
         </Table>
       </TableContainer>
+    
       <ModalFiltro 
-        open={open}
+        open={openFiltrar}
+        onClose={handleCloseFiltrar}
         handleConfirmar={handleConfirmar}
+        turmasPreSelecionadas={turmasSelecionadas}
       />
     </Paper>
   )

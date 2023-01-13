@@ -16,11 +16,14 @@ import { busca } from '../services/TurmaService';
 
 interface ModalFiltroProps extends DialogProps {
   handleConfirmar: (turmas: string[]) => void;
+  onClose: () => void;
+  turmasPreSelecionadas: string[];
 }
 
-function ModalFiltro({handleConfirmar, ...props}: ModalFiltroProps) {
+function ModalFiltro(props: ModalFiltroProps) {
+  const { onClose, handleConfirmar, turmasPreSelecionadas } = props;
   const [turmas, setTurmas] = useState<Turma[]>([]);
-  const [turmasSelecionadas, setTurmasSelecionadas] = useState<string[]>([]);
+  const [turmasSelecionadas, setTurmasSelecionadas] = useState<string[]>(turmasPreSelecionadas);
 
   async function getTurma(){
     await busca("", setTurmas);
@@ -28,8 +31,11 @@ function ModalFiltro({handleConfirmar, ...props}: ModalFiltroProps) {
 
   useEffect(() => {
     getTurma();
-  
   }, [turmas.length]);
+
+  useEffect(() => {
+    setTurmasSelecionadas(turmasPreSelecionadas);
+  }, [turmasPreSelecionadas]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -40,11 +46,16 @@ function ModalFiltro({handleConfirmar, ...props}: ModalFiltroProps) {
       setTurmasSelecionadas(turmasSelecionadas.filter((turma) => turma !== event.target.id));
     }
   };
+
+  const handleClose = () => {
+    onClose();
+  }
   
 
   return (
     <Dialog
       open={props.open}
+      onClose={handleClose}
     >
       <DialogTitle>Filtrar</DialogTitle>
       <DialogContent>
@@ -53,7 +64,8 @@ function ModalFiltro({handleConfirmar, ...props}: ModalFiltroProps) {
             turmas.map((turma) => (
               <FormControlLabel
                 control={
-                  <Checkbox 
+                  <Checkbox
+                    checked={turmasSelecionadas.includes(turma.id.toString())}
                     onChange={handleChange}
                     id={turma.id.toString()} 
                   />
