@@ -12,6 +12,7 @@ import { busca as buscaTurma } from '../services/TurmaService';
 
 function ListaProjetos() {
   const [projetos, setProjetos] = useState<Projeto[]>([]);
+  const [projetosFiltrados, setProjetosFiltrados] = useState<Projeto[]>([]);
   const [turmas, setTurmas] = useState<Turma[]>([]);
   const [turmasSelecionadas, setTurmasSelecionadas] = useState<string[]>([]);
   const colunas: string[] = ['Logo', 'Nome', 'Grupo', 'Turma', 'Link', 'Pitch'];
@@ -33,6 +34,10 @@ function ListaProjetos() {
   useEffect(() => {
     getTurma();
   }, [turmas.length]);
+
+  useEffect(() => {
+    setProjetosFiltrados(projetos.filter((projeto) => turmasSelecionadas.includes(projeto.grupoPi.turma.id.toString())));
+  }, [turmasSelecionadas]);
 
   const handleConfirmar = (turmasSelecionadas: string[]) => {
     setTurmasSelecionadas(turmasSelecionadas);
@@ -63,7 +68,7 @@ function ListaProjetos() {
           </TableHead>
           <TableBody>
             {
-              projetos.map((projeto) => (
+              projetosFiltrados.map((projeto) => (
                 <TableRow
                   key={projeto.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
