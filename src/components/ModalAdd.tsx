@@ -3,6 +3,7 @@ import React from 'react';
 
 import TabPanel from './TabPanel';
 import FormTurma from './FormTurma';
+import FormGrupo from './FormGrupo';
 
 interface ModalAddProps extends DialogProps {
   handleClose: (modal: string) => void;
@@ -39,7 +40,7 @@ function ModalAdd(props: ModalAddProps) {
               <FormTurma />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              Grupo
+              <FormGrupo />
             </TabPanel>
             <TabPanel value={value} index={2}>
               Projeto
