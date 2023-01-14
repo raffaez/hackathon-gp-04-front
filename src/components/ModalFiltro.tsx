@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogProps,
   DialogTitle,
-  Divider,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -82,9 +81,9 @@ function ModalFiltro(props: ModalFiltroProps) {
               onChange={handleChangeStatusTurmas}
               defaultValue={statusTurmasPreSelecionado ? statusTurmasPreSelecionado : '3'}
             >
-              <FormControlLabel value="1" control={<Radio />} label="Mostrar apenas turmas ativas" />
-              <FormControlLabel value="2" control={<Radio />} label="Mostrar apenas turmas inativas" />
-              <FormControlLabel value="3" control={<Radio />} label="Mostrar todas selecionadas" />
+              <FormControlLabel value="3" control={<Radio />} label="Mostrar projetos de todas selecionadas" />
+              <FormControlLabel value="1" control={<Radio />} label="Mostrar apenas projetos de turmas ativas" />
+              <FormControlLabel value="2" control={<Radio />} label="Mostrar apenas projetos de turmas inativas" />
             </RadioGroup>
           </FormControl>
         </FormGroup>

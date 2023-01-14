@@ -9,10 +9,8 @@ export const busca = async (url: string, setDado: Dispatch<SetStateAction<Turma[
 }
 
 export const add = async (turma: Turma) => {
-  const response = await api.post('turmas', {
+  await api.post('turmas', {
     descricao: turma.descricao,
     isAtivo: turma.isAtivo,
   });
-  console.log(response.data);
-
 }

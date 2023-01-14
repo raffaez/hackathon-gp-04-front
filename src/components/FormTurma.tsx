@@ -1,4 +1,4 @@
-import { Button, DialogActions, FormControlLabel, FormGroup, Switch, TextField } from '@mui/material';
+import { Box, Button, DialogActions, FormControlLabel, FormGroup, Switch, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import React from 'react';
 import * as yup from 'yup';
@@ -9,7 +9,7 @@ import { add } from '../services/TurmaService';
 const validationSchema = yup.object({
   descricao: yup
     .string()
-    .required('Descrição é obrigatória'),
+    .required('É obrigatório preencher a descrição da turma'),
 });
 
 function FormTurma() {
@@ -30,15 +30,17 @@ function FormTurma() {
   return (
     <form onSubmit={formik.handleSubmit}>
       <FormGroup>
-        <TextField
-          id="descricao"
-          name="descricao"
-          label="Descrição"
-          value={formik.values.descricao}
-          onChange={formik.handleChange}
-          error={formik.touched.descricao && Boolean(formik.errors.descricao)}
-          helperText={formik.touched.descricao && formik.errors.descricao}
-        />
+        <Box sx={{ mb: 2 }}>
+          <TextField
+            id="descricao"
+            name="descricao"
+            label="Descrição"
+            value={formik.values.descricao}
+            onChange={formik.handleChange}
+            error={formik.touched.descricao && Boolean(formik.errors.descricao)}
+            helperText={formik.touched.descricao && formik.errors.descricao}
+          />
+        </Box>
         <FormControlLabel 
           control={<Switch 
             id="isAtivo"
