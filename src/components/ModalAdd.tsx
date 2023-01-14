@@ -1,9 +1,10 @@
 import { Box, Dialog, DialogContent, DialogProps, DialogTitle, Tab, Tabs } from '@mui/material';
 import React from 'react';
 
-import TabPanel from './TabPanel';
-import FormTurma from './FormTurma';
 import FormGrupo from './FormGrupo';
+import FormProjeto from './FormProjeto';
+import FormTurma from './FormTurma';
+import TabPanel from './TabPanel';
 
 interface ModalAddProps extends DialogProps {
   handleClose: (modal: string) => void;
@@ -43,7 +44,7 @@ function ModalAdd(props: ModalAddProps) {
               <FormGrupo />
             </TabPanel>
             <TabPanel value={value} index={2}>
-              Projeto
+              <FormProjeto />
             </TabPanel>
           </Box>
         </Box>
