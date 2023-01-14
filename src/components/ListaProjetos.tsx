@@ -61,17 +61,25 @@ function ListaProjetos() {
     setOpenFiltrar(false);
   }
 
-  const handleOpenFiltrar = () => {
-    setOpenFiltrar(true);
+  const handleOpen = (modal: string) => {
+    switch (modal) {
+      case 'filtrar':
+        setOpenFiltrar(true);
+        break;
+    }
   }
 
-  const handleCloseFiltrar = () => {
-    setOpenFiltrar(false);
+  const handleClose = (modal: string) => { 
+    switch (modal) {
+      case 'filtrar':
+        setOpenFiltrar(false);
+        break;
+    }
   }
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableToolbar handleOpenFiltrar={handleOpenFiltrar} />
+      <TableToolbar handleOpen={handleOpen} />
       <TableContainer>
         <Table>
           <TableHead>
@@ -118,7 +126,7 @@ function ListaProjetos() {
         open={openFiltrar}
         turmas={turmas}
         tipoTurmasPreSelecionado={tipoTurmas}
-        onClose={handleCloseFiltrar}
+        handleClose={handleClose}
         handleConfirmar={handleConfirmar}
         turmasPreSelecionadas={turmasSelecionadas}
       />

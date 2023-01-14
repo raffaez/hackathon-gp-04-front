@@ -20,14 +20,14 @@ import { Turma } from '../models/Turma';
 
 interface ModalFiltroProps extends DialogProps {
   handleConfirmar: (turmas: string[], tipoTurmas: string) => void;
-  onClose: () => void;
+  handleClose: (modal: string) => void;
   turmasPreSelecionadas: string[];
   tipoTurmasPreSelecionado: string;
   turmas: Turma[];
 }
 
 function ModalFiltro(props: ModalFiltroProps) {
-  const { onClose, handleConfirmar, turmasPreSelecionadas, tipoTurmasPreSelecionado, turmas } = props;
+  const { handleClose, handleConfirmar, turmasPreSelecionadas, tipoTurmasPreSelecionado, turmas } = props;
   const [turmasSelecionadas, setTurmasSelecionadas] = useState<string[]>(turmasPreSelecionadas);
   const [tipoTurmas, setTipoTurmas] = useState<string>('');
 
@@ -48,16 +48,12 @@ function ModalFiltro(props: ModalFiltroProps) {
   const handleChangeTipoTurma = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTipoTurmas((event.target as HTMLInputElement).value);
   };
-
-  const handleClose = () => {
-    onClose();
-  }
   
 
   return (
     <Dialog
       open={props.open}
-      onClose={handleClose}
+      onClose={handleClose.bind(null, 'filtro')}
     >
       <DialogTitle>Filtrar</DialogTitle>
       <DialogContent>

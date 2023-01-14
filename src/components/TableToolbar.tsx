@@ -4,11 +4,11 @@ import Toolbar, { ToolbarProps } from '@mui/material/Toolbar/Toolbar';
 import React from 'react';
 
 interface TableToolbarProps extends ToolbarProps {
-  handleOpenFiltrar: () => void;
+  handleOpen: (modal: string) => void;
 }
 
 function TableToolbar(props: TableToolbarProps) {
-  const { handleOpenFiltrar } = props;
+  const { handleOpen } = props;
   
   return (
     <Toolbar>
@@ -24,7 +24,7 @@ function TableToolbar(props: TableToolbarProps) {
         <Tooltip title="Filtrar turmas"
         >
           <IconButton
-            onClick={handleOpenFiltrar}
+            onClick={handleOpen.bind(null, 'filtro')}
           >
             <FilterAltRounded />
           </IconButton>
