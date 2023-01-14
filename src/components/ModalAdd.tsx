@@ -1,10 +1,11 @@
-import { Box, Dialog, DialogContent, DialogProps, DialogTitle, Tab, Tabs } from '@mui/material';
+import { Box, Dialog, DialogContent, DialogProps, DialogTitle, IconButton, Tab, Tabs } from '@mui/material';
 import React from 'react';
 
 import FormGrupo from './FormGrupo';
 import FormProjeto from './FormProjeto';
 import FormTurma from './FormTurma';
 import TabPanel from './TabPanel';
+import { CloseRounded } from '@mui/icons-material';
 
 interface ModalAddProps extends DialogProps {
   handleClose: (modal: string) => void;
@@ -28,6 +29,19 @@ function ModalAdd(props: ModalAddProps) {
     >
       <DialogTitle>
         Cadastrar
+        
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseRounded />
+        </IconButton>
       </DialogTitle>
       <DialogContent sx={{ paddingY: 0 }}>
         <Box>

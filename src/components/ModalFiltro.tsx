@@ -10,12 +10,14 @@ import {
   FormControlLabel,
   FormGroup,
   FormLabel,
+  IconButton,
   Radio,
   RadioGroup,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 import { Turma } from '../models/Turma';
+import { CloseRounded } from '@mui/icons-material';
 
 interface ModalFiltroProps extends DialogProps {
   handleConfirmar: (turmas: string[], statusTurmas: string) => void;
@@ -47,14 +49,32 @@ function ModalFiltro(props: ModalFiltroProps) {
   const handleChangeStatusTurmas = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStatusTurmas((event.target as HTMLInputElement).value);
   };
+
+  const onClose = () => { handleClose('filtro') }
   
 
   return (
     <Dialog
       open={props.open}
-      onClose={handleClose.bind(null, 'filtro')}
+      onClose={onClose}
     >
-      <DialogTitle>Filtrar</DialogTitle>
+      <DialogTitle>
+        Filtrar
+        
+        
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseRounded />
+        </IconButton>
+      </DialogTitle>
       <DialogContent>
         <FormGroup>
           <FormControl>
