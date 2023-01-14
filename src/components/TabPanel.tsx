@@ -10,10 +10,6 @@ interface TabPanelProps {
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
-  const addTurma = <div>Turma</div>;
-  const addGrupo = <div>Grupo</div>;
-  const addProjeto = <div>Projeto</div>;
-
   return (
     <div
       role="tabpanel"
@@ -23,14 +19,8 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          {
-            {
-              0: addTurma,
-              1: addGrupo,
-              2: addProjeto
-            }[index]
-          }
+        <Box>
+          {children}
         </Box>
       )}
     </div>

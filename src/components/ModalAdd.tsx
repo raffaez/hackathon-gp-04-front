@@ -1,6 +1,8 @@
-import { Box, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, Tab, Tabs } from '@mui/material';
+import { Box, Dialog, DialogContent, DialogProps, DialogTitle, Tab, Tabs } from '@mui/material';
 import React from 'react';
+
 import TabPanel from './TabPanel';
+import FormTurma from './FormTurma';
 
 interface ModalAddProps extends DialogProps {
   handleClose: (modal: string) => void;
@@ -25,27 +27,26 @@ function ModalAdd(props: ModalAddProps) {
       <DialogTitle>
         Cadastrar
       </DialogTitle>
-      <DialogContent>
-        <Box sx={{ width: '100%', borderBottom: 1, borderColor: 'divider' }}>
+      <DialogContent sx={{ paddingY: 0 }}>
+        <Box>
           <Tabs value={value} onChange={handleChange}>
             <Tab label="Turma" />
             <Tab label="Grupo" />
             <Tab label="Projeto" />
           </Tabs>
-          <TabPanel value={value} index={0}>
-            Turma
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            Grupo
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            Projeto
-          </TabPanel>
+          <Box sx={{ marginTop: 2 }}>
+            <TabPanel value={value} index={0}>
+              <FormTurma />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              Grupo
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              Projeto
+            </TabPanel>
+          </Box>
         </Box>
       </DialogContent>
-      <DialogActions>
-
-      </DialogActions>
     </Dialog>
   )
 }
