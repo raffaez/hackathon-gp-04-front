@@ -8,6 +8,7 @@ import { busca as buscaProjeto } from '../services/ProjetoService';
 import { busca as buscaTurma } from '../services/TurmaService';
 import ModalFiltro from './ModalFiltro';
 import TableToolbar from './TableToolbar';
+import ModalAdd from './ModalAdd';
 
 
 function ListaProjetos() {
@@ -21,6 +22,7 @@ function ListaProjetos() {
   const colunas: string[] = ['Logo', 'Nome', 'Grupo', 'Turma', 'Link', 'Pitch'];
 
   const [openFiltrar, setOpenFiltrar] = useState<boolean>(false);
+  const [openAdd, setOpenAdd] = useState<boolean>(false);
 
   async function getProjeto(){
     await buscaProjeto("", setProjetos);
@@ -63,16 +65,22 @@ function ListaProjetos() {
 
   const handleOpen = (modal: string) => {
     switch (modal) {
-      case 'filtrar':
+      case 'filtro':
         setOpenFiltrar(true);
+        break;
+      case 'add':
+        setOpenAdd(true);
         break;
     }
   }
 
   const handleClose = (modal: string) => { 
     switch (modal) {
-      case 'filtrar':
+      case 'filtro':
         setOpenFiltrar(false);
+        break;
+      case 'add':
+        setOpenAdd(false);
         break;
     }
   }
@@ -129,6 +137,11 @@ function ListaProjetos() {
         handleClose={handleClose}
         handleConfirmar={handleConfirmar}
         turmasPreSelecionadas={turmasSelecionadas}
+      />
+
+      <ModalAdd
+        open={openAdd}
+        handleClose={handleClose}
       />
     </Paper>
   )

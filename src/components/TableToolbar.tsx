@@ -30,8 +30,10 @@ function TableToolbar(props: TableToolbarProps) {
           </IconButton>
         </Tooltip>
 
-        <Tooltip title="Adicionar projeto">
-          <IconButton>
+        <Tooltip title="Cadastrar">
+          <IconButton
+            onClick={handleOpen.bind(null, 'add')}
+          >
             <AddCircleOutlineRounded />
           </IconButton>
         </Tooltip>
