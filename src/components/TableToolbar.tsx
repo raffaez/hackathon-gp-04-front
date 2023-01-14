@@ -21,7 +21,7 @@ function TableToolbar(props: TableToolbarProps) {
           Projetos
         </Typography>
         
-        <Tooltip title="Filtrar"
+        <Tooltip title="Filtrar turmas"
         >
           <IconButton
             onClick={handleOpenFiltrar}

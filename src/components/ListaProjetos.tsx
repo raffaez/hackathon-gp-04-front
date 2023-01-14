@@ -3,19 +3,23 @@ import Image from 'mui-image';
 import React, { useEffect, useState } from 'react';
 
 import { Projeto } from '../models/Projeto';
+import { Turma } from '../models/Turma';
 import { busca as buscaProjeto } from '../services/ProjetoService';
+import { busca as buscaTurma } from '../services/TurmaService';
 import ModalFiltro from './ModalFiltro';
 import TableToolbar from './TableToolbar';
-import { Turma } from '../models/Turma';
-import { busca as buscaTurma } from '../services/TurmaService';
 
 
 function ListaProjetos() {
   const [projetos, setProjetos] = useState<Projeto[]>([]);
   const [projetosFiltrados, setProjetosFiltrados] = useState<Projeto[]>([]);
+
   const [turmas, setTurmas] = useState<Turma[]>([]);
   const [turmasSelecionadas, setTurmasSelecionadas] = useState<string[]>([]);
+  const [tipoTurmas, setTipoTurmas] = useState<string>('3');
+
   const colunas: string[] = ['Logo', 'Nome', 'Grupo', 'Turma', 'Link', 'Pitch'];
+
   const [openFiltrar, setOpenFiltrar] = useState<boolean>(false);
 
   async function getProjeto(){
@@ -36,11 +40,24 @@ function ListaProjetos() {
   }, [turmas.length]);
 
   useEffect(() => {
-    setProjetosFiltrados(projetos.filter((projeto) => turmasSelecionadas.includes(projeto.grupoPi.turma.id.toString())));
-  }, [turmasSelecionadas]);
+    setProjetosFiltrados(projetos.filter((projeto) => {
+      if (turmasSelecionadas.includes(projeto.grupoPi.turma.id.toString())){
+        if (
+          (tipoTurmas === '1' && projeto.grupoPi.turma.isAtivo)
+          || (tipoTurmas === '2' && !projeto.grupoPi.turma.isAtivo)
+          || (tipoTurmas === '3')
+        ){
+          return true;
+        }
+      }
+      return false;
+    }
+    ));
+  }, [turmasSelecionadas, tipoTurmas]);
 
-  const handleConfirmar = (turmasSelecionadas: string[]) => {
+  const handleConfirmar = (turmasSelecionadas: string[], tipoTurmas: string) => {
     setTurmasSelecionadas(turmasSelecionadas);
+    setTipoTurmas(tipoTurmas);
     setOpenFiltrar(false);
   }
 
@@ -99,6 +116,8 @@ function ListaProjetos() {
     
       <ModalFiltro 
         open={openFiltrar}
+        turmas={turmas}
+        tipoTurmasPreSelecionado={tipoTurmas}
         onClose={handleCloseFiltrar}
         handleConfirmar={handleConfirmar}
         turmasPreSelecionadas={turmasSelecionadas}
