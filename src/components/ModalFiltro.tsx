@@ -19,17 +19,17 @@ import React, { useEffect, useState } from 'react';
 import { Turma } from '../models/Turma';
 
 interface ModalFiltroProps extends DialogProps {
-  handleConfirmar: (turmas: string[], tipoTurmas: string) => void;
+  handleConfirmar: (turmas: string[], statusTurmas: string) => void;
   handleClose: (modal: string) => void;
   turmasPreSelecionadas: string[];
-  tipoTurmasPreSelecionado: string;
+  statusTurmasPreSelecionado: string;
   turmas: Turma[];
 }
 
 function ModalFiltro(props: ModalFiltroProps) {
-  const { handleClose, handleConfirmar, turmasPreSelecionadas, tipoTurmasPreSelecionado, turmas } = props;
+  const { handleClose, handleConfirmar, turmasPreSelecionadas, statusTurmasPreSelecionado, turmas } = props;
   const [turmasSelecionadas, setTurmasSelecionadas] = useState<string[]>(turmasPreSelecionadas);
-  const [tipoTurmas, setTipoTurmas] = useState<string>('');
+  const [statusTurmas, setStatusTurmas] = useState<string>('');
 
   useEffect(() => {
     setTurmasSelecionadas(turmasPreSelecionadas);
@@ -45,8 +45,8 @@ function ModalFiltro(props: ModalFiltroProps) {
     }
   };
 
-  const handleChangeTipoTurma = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTipoTurmas((event.target as HTMLInputElement).value);
+  const handleChangeStatusTurmas = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStatusTurmas((event.target as HTMLInputElement).value);
   };
   
 
@@ -76,12 +76,11 @@ function ModalFiltro(props: ModalFiltroProps) {
             }
           </FormControl>
 
-          <Divider />
-
           <FormControl>
+            <FormLabel>Status</FormLabel>
             <RadioGroup 
-              onChange={handleChangeTipoTurma}
-              defaultValue={tipoTurmasPreSelecionado}
+              onChange={handleChangeStatusTurmas}
+              defaultValue={statusTurmasPreSelecionado ? statusTurmasPreSelecionado : '3'}
             >
               <FormControlLabel value="1" control={<Radio />} label="Mostrar apenas turmas ativas" />
               <FormControlLabel value="2" control={<Radio />} label="Mostrar apenas turmas inativas" />
@@ -91,7 +90,7 @@ function ModalFiltro(props: ModalFiltroProps) {
         </FormGroup>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleConfirmar(turmasSelecionadas, tipoTurmas)}>Confirmar</Button>
+        <Button onClick={() => handleConfirmar(turmasSelecionadas, statusTurmas)}>Confirmar</Button>
       </DialogActions>
     </Dialog>
   )

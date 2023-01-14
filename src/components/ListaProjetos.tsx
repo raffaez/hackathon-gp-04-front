@@ -17,7 +17,7 @@ function ListaProjetos() {
 
   const [turmas, setTurmas] = useState<Turma[]>([]);
   const [turmasSelecionadas, setTurmasSelecionadas] = useState<string[]>([]);
-  const [tipoTurmas, setTipoTurmas] = useState<string>('3');
+  const [statusTurmas, setStatusTurmas] = useState<string>('3');
 
   const colunas: string[] = ['Logo', 'Nome', 'Grupo', 'Turma', 'Link', 'Pitch'];
 
@@ -45,9 +45,9 @@ function ListaProjetos() {
     setProjetosFiltrados(projetos.filter((projeto) => {
       if (turmasSelecionadas.includes(projeto.grupoPi.turma.id.toString())){
         if (
-          (tipoTurmas === '1' && projeto.grupoPi.turma.isAtivo)
-          || (tipoTurmas === '2' && !projeto.grupoPi.turma.isAtivo)
-          || (tipoTurmas === '3')
+          (statusTurmas === '1' && projeto.grupoPi.turma.isAtivo)
+          || (statusTurmas === '2' && !projeto.grupoPi.turma.isAtivo)
+          || (statusTurmas === '3')
         ){
           return true;
         }
@@ -55,11 +55,11 @@ function ListaProjetos() {
       return false;
     }
     ));
-  }, [turmasSelecionadas, tipoTurmas]);
+  }, [turmasSelecionadas, statusTurmas]);
 
-  const handleConfirmar = (turmasSelecionadas: string[], tipoTurmas: string) => {
+  const handleConfirmar = (turmasSelecionadas: string[], statusTurmas: string) => {
     setTurmasSelecionadas(turmasSelecionadas);
-    setTipoTurmas(tipoTurmas);
+    setStatusTurmas(statusTurmas);
     setOpenFiltrar(false);
   }
 
@@ -133,7 +133,7 @@ function ListaProjetos() {
       <ModalFiltro 
         open={openFiltrar}
         turmas={turmas}
-        tipoTurmasPreSelecionado={tipoTurmas}
+        statusTurmasPreSelecionado={statusTurmas}
         handleClose={handleClose}
         handleConfirmar={handleConfirmar}
         turmasPreSelecionadas={turmasSelecionadas}
