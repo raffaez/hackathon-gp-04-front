@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
 
 import { GrupoPi } from '../models/GrupoPi';
@@ -24,12 +25,21 @@ const validationSchema = yup.object({
     .number()
     .min(1, 'É obrigatório preencher o número do grupo')
     .required('É obrigatório preencher o número do grupo'),
+  turma: yup
+    .object()
+    .required('É obrigatório selecionar a turma'),
   maisInfos: yup
     .string()
     .required('É obrigatório preencher informações do grupo'),
 });
 
-function FormGrupo() {
+interface FormGrupoProps {
+  onClose: () => void;
+}
+
+function FormGrupo(props: FormGrupoProps) {
+  const { onClose } = props;
+
   const [turmas, setTurmas] = useState<Turma[]>([{
     id: 0,
     descricao: '',
@@ -55,6 +65,11 @@ function FormGrupo() {
     }
   };
 
+  const onSave = () => {
+    toast.success('Grupo cadastrado com sucesso!');
+    onClose();  
+  };
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
@@ -64,6 +79,10 @@ function FormGrupo() {
       }
       
       await add(values);
+
+      formik.resetForm();
+
+      onSave();
     },
   });
 

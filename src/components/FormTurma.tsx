@@ -5,6 +5,7 @@ import * as yup from 'yup';
 
 import { Turma } from '../models/Turma';
 import { add } from '../services/TurmaService';
+import { toast } from 'react-toastify';
 
 const validationSchema = yup.object({
   descricao: yup
@@ -12,11 +13,22 @@ const validationSchema = yup.object({
     .required('É obrigatório preencher a descrição da turma'),
 });
 
-function FormTurma() {
+interface FormTurmaProps {
+  onClose: () => void;
+}
+
+function FormTurma(props: FormTurmaProps) {
+  const { onClose } = props;
+  
   const initialValues: Turma = {
     id: 0,
     descricao: '',
     isAtivo: true,
+  };
+
+  const onSave = () => {
+    toast.success('Projeto cadastrado com sucesso!');
+    onClose();  
   };
 
   const formik = useFormik({
@@ -24,6 +36,10 @@ function FormTurma() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       await add(values);
+
+      formik.resetForm();
+
+      onSave();
     },
   });
 

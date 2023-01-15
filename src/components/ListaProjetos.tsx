@@ -1,4 +1,4 @@
-import { Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Button, Grid, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import Image from 'mui-image';
 import React, { useEffect, useState } from 'react';
 
@@ -9,6 +9,9 @@ import { busca as buscaTurma } from '../services/TurmaService';
 import ModalFiltro from './ModalFiltro';
 import TableToolbar from './TableToolbar';
 import ModalAdd from './ModalAdd';
+import { GrupoPi } from '../models/GrupoPi';
+import { busca as buscaGrupo } from '../services/GrupoService';
+import { AddRounded } from '@mui/icons-material';
 
 
 function ListaProjetos() {
@@ -18,6 +21,8 @@ function ListaProjetos() {
   const [turmas, setTurmas] = useState<Turma[]>([]);
   const [turmasSelecionadas, setTurmasSelecionadas] = useState<string[]>([]);
   const [statusTurmas, setStatusTurmas] = useState<string>('3');
+
+  const [gruposPi, setGruposPi] = useState<GrupoPi[]>([]);
 
   const colunas: string[] = ['Logo', 'Nome', 'Grupo', 'Turma', 'Link', 'Pitch'];
 
@@ -41,6 +46,14 @@ function ListaProjetos() {
     getTurma();
   }, [turmas.length]);
 
+  async function getGrupo(){
+    await buscaGrupo("", setGruposPi);
+  }
+
+  useEffect(() => {
+    getGrupo();
+  }, [gruposPi.length]);
+
   useEffect(() => {
     setProjetosFiltrados(projetos.filter((projeto) => {
       if (turmasSelecionadas.includes(projeto.grupoPi.turma.id.toString())){
@@ -55,7 +68,7 @@ function ListaProjetos() {
       return false;
     }
     ));
-  }, [turmasSelecionadas, statusTurmas]);
+  }, [turmasSelecionadas, statusTurmas, projetos.length]);
 
   const handleConfirmar = (turmasSelecionadas: string[], statusTurmas: string) => {
     setTurmasSelecionadas(turmasSelecionadas);
@@ -81,6 +94,7 @@ function ListaProjetos() {
         break;
       case 'add':
         setOpenAdd(false);
+        getProjeto();
         break;
     }
   }
@@ -128,6 +142,25 @@ function ListaProjetos() {
             }
           </TableBody>
         </Table>
+            {
+              projetosFiltrados.length === 0 && (
+                <Grid container justifyContent="center" alignItems="center">
+                  <Grid item sx={{ py: 3 }} textAlign="center">
+                    <Typography variant="h6" color="text.secondary">
+                      Nenhum projeto encontrado
+                    </Typography>
+                    <Button 
+                      variant="contained" 
+                      endIcon={<AddRounded />} 
+                      sx={{ mt: 2 }}
+                      onClick={() => handleOpen('add')}
+                    >
+                      Adicionar projeto
+                    </Button>
+                  </Grid>
+                </Grid>
+              )
+            }
       </TableContainer>
     
       <ModalFiltro 
@@ -142,6 +175,8 @@ function ListaProjetos() {
       <ModalAdd
         open={openAdd}
         handleClose={handleClose}
+        temTurmas={turmas.length > 0}
+        temGrupos={gruposPi.length > 0}
       />
     </Paper>
   )

@@ -9,6 +9,7 @@ import { Turma } from '../models/Turma';
 import { busca as buscaGrupo } from '../services/GrupoService';
 import { add } from '../services/ProjetoService';
 import { busca as buscaTurma } from '../services/TurmaService';
+import { toast } from 'react-toastify';
 
 const validationSchema = yup.object({
   nomeProjeto: yup
@@ -28,7 +29,13 @@ const validationSchema = yup.object({
     .required('É obrigatório preencher o pit do projeto'),
 });
 
-function FormProjeto() {
+interface FormProjetoProps {
+  onClose: () => void;
+}
+
+function FormProjeto(props: FormProjetoProps) {
+  const { onClose } = props;
+  
   const [turmas, setTurmas] = useState<Turma[]>([{
     id: 0,
     descricao: '',
@@ -80,11 +87,23 @@ function FormProjeto() {
     }
   };
 
+  const onSave = () => {
+    toast.success('Projeto cadastrado com sucesso!');
+    onClose();  
+  };
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      if(values.grupoPi.id<=0){
+        values.grupoPi.id=grupos[0].id;
+      }
       await add(values);
+
+      formik.resetForm();
+
+      onSave();
     },
   });
 

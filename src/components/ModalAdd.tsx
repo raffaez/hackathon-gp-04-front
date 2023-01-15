@@ -1,18 +1,20 @@
-import { Box, Dialog, DialogContent, DialogProps, DialogTitle, IconButton, Tab, Tabs } from '@mui/material';
+import { CloseRounded } from '@mui/icons-material';
+import { Box, Dialog, DialogContent, DialogProps, DialogTitle, IconButton, Tab, Tabs, Tooltip } from '@mui/material';
 import React from 'react';
 
 import FormGrupo from './FormGrupo';
 import FormProjeto from './FormProjeto';
 import FormTurma from './FormTurma';
 import TabPanel from './TabPanel';
-import { CloseRounded } from '@mui/icons-material';
 
 interface ModalAddProps extends DialogProps {
   handleClose: (modal: string) => void;
+  temTurmas: boolean;
+  temGrupos: boolean;
 }
 
 function ModalAdd(props: ModalAddProps) {
-  const { handleClose } = props;
+  const { handleClose, temTurmas, temGrupos } = props;
   const [value, setValue] = React.useState(0);
 
   const onClose = () => { handleClose('add') }
@@ -47,18 +49,28 @@ function ModalAdd(props: ModalAddProps) {
         <Box>
           <Tabs value={value} onChange={handleChange}>
             <Tab label="Turma" />
-            <Tab label="Grupo" />
-            <Tab label="Projeto" />
+            {
+              temTurmas ? <Tab label="Grupo" /> 
+              : <Tooltip title="Cadastre uma turma primeiro" placement="top" arrow>
+                  <span><Tab label="Grupo" disabled /></span>
+                </Tooltip>
+            }
+            {
+              temGrupos ? <Tab label="Projeto" />
+              : <Tooltip title="Cadastre um grupo primeiro" placement="top" arrow>
+                  <span><Tab label="Projeto" disabled /></span>
+                </Tooltip>
+            }
           </Tabs>
           <Box sx={{ marginTop: 2 }}>
             <TabPanel value={value} index={0}>
-              <FormTurma />
+              <FormTurma onClose={onClose} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <FormGrupo />
+              <FormGrupo onClose={onClose} />
             </TabPanel>
             <TabPanel value={value} index={2}>
-              <FormProjeto />
+              <FormProjeto onClose={onClose} />
             </TabPanel>
           </Box>
         </Box>
