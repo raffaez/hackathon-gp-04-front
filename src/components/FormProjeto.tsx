@@ -111,8 +111,6 @@ function FormProjeto(props: FormProjetoProps) {
       values.linkProjeto = addHttps(values.linkProjeto);
       values.pitProjeto = addHttps(values.pitProjeto);
 
-      alert(JSON.stringify(values, null, 2));
-
       await add(values);
 
       formik.resetForm();

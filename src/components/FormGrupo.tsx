@@ -42,11 +42,11 @@ const validationSchema = yup.object({
 });
 
 interface FormGrupoProps {
-  onClose: () => void;
+  handleSave: () => void;
 }
 
 function FormGrupo(props: FormGrupoProps) {
-  const { onClose } = props;
+  const { handleSave } = props;
 
   const [turmas, setTurmas] = useState<Turma[]>([{
     id: 0,
@@ -75,7 +75,7 @@ function FormGrupo(props: FormGrupoProps) {
 
   const onSave = () => {
     toast.success('Grupo cadastrado com sucesso!');
-    onClose();  
+    handleSave();  
   };
 
   const formik = useFormik({

@@ -14,11 +14,11 @@ const validationSchema = yup.object({
 });
 
 interface FormTurmaProps {
-  onClose: () => void;
+  handleSave: () => void;
 }
 
 function FormTurma(props: FormTurmaProps) {
-  const { onClose } = props;
+  const { handleSave } = props;
   
   const initialValues: Turma = {
     id: 0,
@@ -28,7 +28,7 @@ function FormTurma(props: FormTurmaProps) {
 
   const onSave = () => {
     toast.success('Turma cadastrada com sucesso!');
-    onClose();  
+    handleSave();  
   };
 
   const formik = useFormik({

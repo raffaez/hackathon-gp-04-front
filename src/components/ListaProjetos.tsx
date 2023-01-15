@@ -100,13 +100,13 @@ function ListaProjetos() {
     switch (modal) {
       case 'filtro':
         setOpenFiltrar(false);
-        getProjeto();
         break;
       case 'add':
         setOpenAdd(false);
-        getProjeto();
         break;
     }
+    
+    getProjeto();
   }
 
   return (
@@ -197,8 +197,6 @@ function ListaProjetos() {
       <ModalAdd
         open={openAdd}
         handleClose={handleClose}
-        temTurmas={turmas.length > 0}
-        temGrupos={gruposPi.length > 0}
       />
     </Paper>
   )
