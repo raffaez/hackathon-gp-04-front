@@ -92,6 +92,13 @@ function FormProjeto(props: FormProjetoProps) {
     onClose();  
   };
 
+  function addHttps($url: string){
+    if($url.substring(0, 4) !== "http"){
+      return "https://"+$url;
+    }
+    return $url;
+  }
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
@@ -99,6 +106,13 @@ function FormProjeto(props: FormProjetoProps) {
       if(values.grupoPi.id<=0){
         values.grupoPi.id=grupos[0].id;
       }
+
+      values.logoProjeto = addHttps(values.logoProjeto);
+      values.linkProjeto = addHttps(values.linkProjeto);
+      values.pitProjeto = addHttps(values.pitProjeto);
+
+      alert(JSON.stringify(values, null, 2));
+
       await add(values);
 
       formik.resetForm();
