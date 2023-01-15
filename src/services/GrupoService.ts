@@ -7,6 +7,12 @@ export const busca = async (url: string, setDado: Dispatch<SetStateAction<GrupoP
   setDado(response.data);
 }
 
+export const buscaGrupoTurma = async (numeroGrupo: string, turmaId: number) => {
+  const response = await api.get(`grupos/${numeroGrupo}/${turmaId}`);
+
+  return response.data;
+}
+
 export const add = async (grupo: GrupoPi) => {
   await api.post('grupos', {
     numeroGrupo: grupo.numeroGrupo,

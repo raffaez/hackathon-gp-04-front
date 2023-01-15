@@ -17,14 +17,22 @@ import * as yup from 'yup';
 
 import { GrupoPi } from '../models/GrupoPi';
 import { Turma } from '../models/Turma';
-import { add } from '../services/GrupoService';
+import { add, buscaGrupoTurma } from '../services/GrupoService';
 import { busca as buscaTurma } from '../services/TurmaService';
 
 const validationSchema = yup.object({
   numeroGrupo: yup
     .number()
     .min(1, 'É obrigatório preencher o número do grupo')
-    .required('É obrigatório preencher o número do grupo'),
+    .required('É obrigatório preencher o número do grupo')
+    .test(
+      "grupo-turma check", "Esse grupo já foi cadastrado nessa turma", async (value, schema) => {
+        if (value && await buscaGrupoTurma(value.toString(), schema.parent.turma.id)) {
+          return false;
+        }
+        return true;
+      }
+    ),
   turma: yup
     .object()
     .required('É obrigatório selecionar a turma'),
