@@ -60,7 +60,7 @@ function ListaProjetos() {
         if (
           (statusTurmas === '1' && projeto.grupoPi.turma.isAtivo)
           || (statusTurmas === '2' && !projeto.grupoPi.turma.isAtivo)
-          || (statusTurmas === '3')
+          || (statusTurmas !== '1' && statusTurmas !== '2')
         ){
           return true;
         }
@@ -73,7 +73,7 @@ function ListaProjetos() {
   const handleConfirmar = (turmasSelecionadas: string[], statusTurmas: string) => {
     setTurmasSelecionadas(turmasSelecionadas);
     setStatusTurmas(statusTurmas);
-    setOpenFiltrar(false);
+    handleClose('filtro');
   }
 
   const handleOpen = (modal: string) => {
@@ -91,6 +91,7 @@ function ListaProjetos() {
     switch (modal) {
       case 'filtro':
         setOpenFiltrar(false);
+        getProjeto();
         break;
       case 'add':
         setOpenAdd(false);
