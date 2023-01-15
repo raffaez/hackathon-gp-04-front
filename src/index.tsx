@@ -1,8 +1,10 @@
 import './index.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 import App from './App';
 import Home from './pages/home/Home';
@@ -14,6 +16,19 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Router>
+      
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="light"
+      />
       <Routes>
         <Route element={<App />} />
           <Route path="/" element={<Home />} />
