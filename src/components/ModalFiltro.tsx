@@ -13,6 +13,7 @@ import {
   IconButton,
   Radio,
   RadioGroup,
+  Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
@@ -80,6 +81,7 @@ function ModalFiltro(props: ModalFiltroProps) {
           <FormControl>
             <FormLabel>Turmas</FormLabel>
             {
+              turmas.length > 0 ?
               turmas.map((turma) => (
                 <FormControlLabel
                   control={
@@ -92,6 +94,8 @@ function ModalFiltro(props: ModalFiltroProps) {
                   key={turma.id} 
                   label={turma.descricao} />
               ))
+              :
+              <Typography>Nenhuma turma encontrada</Typography>
             }
           </FormControl>
 
