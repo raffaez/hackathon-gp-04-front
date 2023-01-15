@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Grid, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Button, CircularProgress, Grid, IconButton, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import Image from 'mui-image';
 import React, { useEffect, useState } from 'react';
 
@@ -11,7 +11,8 @@ import TableToolbar from './TableToolbar';
 import ModalAdd from './ModalAdd';
 import { GrupoPi } from '../models/GrupoPi';
 import { busca as buscaGrupo } from '../services/GrupoService';
-import { AddRounded } from '@mui/icons-material';
+import { AddRounded, GitHub } from '@mui/icons-material';
+import { Box } from '@mui/system';
 
 
 function ListaProjetos() {
@@ -176,6 +177,13 @@ function ListaProjetos() {
               }
           </Grid>
       </TableContainer>
+      <Box sx={{ position: 'absolute', bottom: 0, right: 0 }}>
+        <IconButton>
+          <Link href="https://github.com/raffaez/hackathon-gp-04-front" target="_blank" rel="noreferrer" sx={{ color: '#666b6c' }}>
+            <GitHub fontSize="large" />
+          </Link>
+        </IconButton>
+      </Box>
     
       <ModalFiltro 
         open={openFiltrar}
