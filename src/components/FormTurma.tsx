@@ -27,7 +27,7 @@ function FormTurma(props: FormTurmaProps) {
   };
 
   const onSave = () => {
-    toast.success('Projeto cadastrado com sucesso!');
+    toast.success('Turma cadastrada com sucesso!');
     onClose();  
   };
 
