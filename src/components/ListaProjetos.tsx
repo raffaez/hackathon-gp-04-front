@@ -1,4 +1,4 @@
-import { Button, Grid, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Button, CircularProgress, Grid, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import Image from 'mui-image';
 import React, { useEffect, useState } from 'react';
 
@@ -15,6 +15,8 @@ import { AddRounded } from '@mui/icons-material';
 
 
 function ListaProjetos() {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const [projetos, setProjetos] = useState<Projeto[]>([]);
   const [projetosFiltrados, setProjetosFiltrados] = useState<Projeto[]>([]);
 
@@ -38,8 +40,14 @@ function ListaProjetos() {
   }, [projetos.length]);
 
   async function getTurma(){
-    await buscaTurma("", setTurmas);
-    setTurmasSelecionadas(turmas.map((turma) => turma.id.toString())); 
+    await buscaTurma("", setTurmas)
+      .then(() => {
+        setTurmasSelecionadas(turmas.map((turma) => turma.id.toString())); 
+
+        setInterval(() => {
+          setIsLoading(false);
+        },  200);
+      });
   }
 
   useEffect(() => {
@@ -143,25 +151,30 @@ function ListaProjetos() {
             }
           </TableBody>
         </Table>
-            {
-              projetosFiltrados.length === 0 && (
-                <Grid container justifyContent="center" alignItems="center">
+          <Grid container justifyContent="center" alignItems="center">
+              {
+                isLoading ?
                   <Grid item sx={{ py: 3 }} textAlign="center">
-                    <Typography variant="h6" color="text.secondary">
-                      Nenhum projeto encontrado
-                    </Typography>
-                    <Button 
-                      variant="contained" 
-                      endIcon={<AddRounded />} 
-                      sx={{ mt: 2 }}
-                      onClick={() => handleOpen('add')}
-                    >
-                      Adicionar projeto
-                    </Button>
+                    <CircularProgress />
                   </Grid>
-                </Grid>
-              )
-            }
+                :
+                  projetosFiltrados.length === 0 && (
+                    <Grid item sx={{ py: 3 }} textAlign="center">
+                      <Typography variant="h6" color="text.secondary">
+                        Nenhum projeto encontrado
+                      </Typography>
+                      <Button 
+                        variant="contained" 
+                        endIcon={<AddRounded />} 
+                        sx={{ mt: 2 }}
+                        onClick={() => handleOpen('add')}
+                      >
+                        Adicionar projeto
+                      </Button>
+                    </Grid>
+                  )
+              }
+          </Grid>
       </TableContainer>
     
       <ModalFiltro 
