@@ -46,7 +46,7 @@ function FormTurma(props: FormTurmaProps) {
   return (
     <form onSubmit={formik.handleSubmit}>
       <FormGroup>
-        <Box sx={{ mb: 2 }}>
+        <Box sx={{ mb: 1 }}>
           <TextField
             id="descricao"
             name="descricao"

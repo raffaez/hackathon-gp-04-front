@@ -107,7 +107,7 @@ function FormGrupo(props: FormGrupoProps) {
   return (
     <form onSubmit={formik.handleSubmit}>
       <FormGroup>
-        <Box sx={{ mb: 2 }}>
+        <Box sx={{ mb: 1 }}>
           <Grid container>
             <Grid item xs={6} sx={{ paddingRight: 1 }}>
               <TextField
