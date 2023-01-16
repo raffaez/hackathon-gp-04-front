@@ -20,22 +20,31 @@ import { Turma } from '../models/Turma';
 import { add, buscaGrupoTurma } from '../services/GrupoService';
 import { busca as buscaTurma } from '../services/TurmaService';
 
+async function validarGrupoTurma(grupoId: number, turmaId: number){
+  return !(await buscaGrupoTurma(grupoId.toString(), turmaId));
+}
+
 const validationSchema = yup.object({
   numeroGrupo: yup
     .number()
     .min(1, 'É obrigatório preencher o número do grupo')
     .required('É obrigatório preencher o número do grupo')
     .test(
-      "grupo-turma check", "Esse grupo já foi cadastrado nessa turma", async (value, schema) => {
-        if (value && await buscaGrupoTurma(value.toString(), schema.parent.turma.id)) {
-          return false;
+      "validar-grupo-turma", "Esse grupo já foi cadastrado nessa turma", async (value, schema) => {
+        if (value) {
+          return await validarGrupoTurma(value, schema.parent.turma.id);
         }
         return true;
       }
     ),
   turma: yup
     .object()
-    .required('É obrigatório selecionar a turma'),
+    .shape({
+      id: yup
+        .number()
+        .min(1, 'É obrigatório selecionar uma turma')
+        .required('É obrigatório selecionar uma turma'),
+    }),
   maisInfos: yup
     .string()
     .required('É obrigatório preencher informações do grupo'),
@@ -72,6 +81,12 @@ function FormGrupo(props: FormGrupoProps) {
       isAtivo: true,
     }
   };
+
+  useEffect(() => {
+    if(formik.values.turma.id<=0){
+      formik.setFieldValue('turma.id', turmas[0].id);
+    }
+  }, [turmas]);
 
   const onSave = () => {
     toast.success('Grupo cadastrado com sucesso!');
@@ -119,7 +134,7 @@ function FormGrupo(props: FormGrupoProps) {
                   id="turma.id"
                   name="turma.id"
                   label="Turma"
-                  value={formik.values.turma.id>0?formik.values.turma.id:turmas[0].id}
+                  value={formik.values.turma.id}
                   onChange={formik.handleChange}
                 >
                   {turmas.map((turma) => (
