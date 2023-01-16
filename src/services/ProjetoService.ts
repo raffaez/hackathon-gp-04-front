@@ -7,6 +7,12 @@ export const busca = async (url: string, setDado: Dispatch<SetStateAction<Projet
   setDado(response.data);
 }
 
+export const buscaProjetoGrupo = async (grupoId: number) => {
+  const response = await api.get(`projetos/grupo/${grupoId}`);
+
+  return response.data;
+}
+
 export const add = async (projeto: Projeto) => {
   await api.post('projetos', {
     nomeProjeto: projeto.nomeProjeto,

@@ -1,15 +1,30 @@
-import { Button, DialogActions, FormControl, FormGroup, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import {
+  Button,
+  DialogActions,
+  FormControl,
+  FormGroup,
+  FormHelperText,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
 
 import { GrupoPi } from '../models/GrupoPi';
 import { Projeto } from '../models/Projeto';
 import { Turma } from '../models/Turma';
 import { busca as buscaGrupo } from '../services/GrupoService';
-import { add } from '../services/ProjetoService';
+import { add, buscaProjetoGrupo } from '../services/ProjetoService';
 import { busca as buscaTurma } from '../services/TurmaService';
-import { toast } from 'react-toastify';
+
+async function validarGrupo(grupoId: number){
+  return await buscaProjetoGrupo(grupoId);
+}
 
 const validationSchema = yup.object({
   nomeProjeto: yup
@@ -27,7 +42,25 @@ const validationSchema = yup.object({
     .string()
     .matches(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g, 'É obrigatório informar um link para o pit do projeto')
     .required('É obrigatório preencher o pit do projeto'),
-});
+  grupoPi: yup
+    .object()
+    .shape({
+      id: yup
+        .number()
+        .test('obrigatorio', 'É obrigatório selecionar um grupo', (value) => {
+          if(value && value > 0){
+            return true;
+          }
+          return false;
+        })
+        .test('validar-grupo', 'O grupo selecionado já possui um projeto', async (value) => {
+          if(value && await validarGrupo(value)){
+            return false;
+          }
+          return true;
+        })
+    })
+  });
 
 interface FormProjetoProps {
   onClose: () => void;
@@ -174,22 +207,30 @@ function FormProjeto(props: FormProjetoProps) {
               />
             </Grid>
             <Grid item xs={6}>
-              <FormControl fullWidth>
+              <FormControl fullWidth error={formik.touched.grupoPi?.id && Boolean(formik.errors.grupoPi?.id)}>
                 <InputLabel id="grupo-label">Grupo</InputLabel>
                 <Select
                   labelId="grupo-label"
                   id="grupoPi.id"
                   name="grupoPi.id"
                   label="Grupo"
-                  value={formik.values.grupoPi.id>0?formik.values.grupoPi.id:grupos[0].id}
+                  value={formik.values.grupoPi.id>0 ? formik.values.grupoPi.id : ''}
+                  error={formik.touched.grupoPi?.id && Boolean(formik.errors.grupoPi?.id)}
                   onChange={formik.handleChange}
                 >
-                  {grupos.map((grupo) => (
-                    <MenuItem key={grupo.id} value={grupo.id}>Grupo {grupo.numeroGrupo} - {grupo.turma.descricao}</MenuItem>
-                  ))}
+                  {
+                    grupos.map((grupo) => (
+                      <MenuItem key={grupo.id} value={grupo.id}>
+                        Grupo {grupo.numeroGrupo} - {grupo.turma.descricao}
+                      </MenuItem>
+                    ))
+                  }
 
                 </Select>
-
+                {
+                  formik.touched.grupoPi?.id && 
+                  <FormHelperText error={true}>{formik.errors.grupoPi?.id}</FormHelperText>
+                }
               </FormControl>
             </Grid>
           </Grid>
