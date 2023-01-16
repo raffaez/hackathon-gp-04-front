@@ -4,6 +4,7 @@ import {
   DialogActions,
   FormControl,
   FormGroup,
+  FormHelperText,
   Grid,
   InputLabel,
   MenuItem,
@@ -82,12 +83,6 @@ function FormGrupo(props: FormGrupoProps) {
     }
   };
 
-  useEffect(() => {
-    if(formik.values.turma.id<=0){
-      formik.setFieldValue('turma.id', turmas[0].id);
-    }
-  }, [turmas]);
-
   const onSave = () => {
     toast.success('Grupo cadastrado com sucesso!');
     handleSave();  
@@ -127,14 +122,14 @@ function FormGrupo(props: FormGrupoProps) {
               />
             </Grid>
             <Grid item xs={6}>
-              <FormControl fullWidth>
+              <FormControl fullWidth error={formik.touched.turma?.id && Boolean(formik.errors.turma?.id)}>
                 <InputLabel id="turma-label">Turma</InputLabel>
                 <Select
                   labelId="turma-label"
                   id="turma.id"
                   name="turma.id"
                   label="Turma"
-                  value={formik.values.turma.id}
+                  value={formik.values.turma.id>0?formik.values.turma.id:''}
                   onChange={formik.handleChange}
                 >
                   {turmas.map((turma) => (
@@ -142,7 +137,10 @@ function FormGrupo(props: FormGrupoProps) {
                   ))}
 
                 </Select>
-
+                {
+                  formik.touched.turma?.id && 
+                  <FormHelperText error={true}>{formik.errors.turma?.id}</FormHelperText>
+                }
               </FormControl>
             </Grid>
           </Grid>
