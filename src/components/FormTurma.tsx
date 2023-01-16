@@ -51,6 +51,7 @@ function FormTurma(props: FormTurmaProps) {
             id="descricao"
             name="descricao"
             label="Descrição"
+            fullWidth
             value={formik.values.descricao}
             onChange={formik.handleChange}
             error={formik.touched.descricao && Boolean(formik.errors.descricao)}
